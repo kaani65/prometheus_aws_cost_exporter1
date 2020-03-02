@@ -21,6 +21,8 @@ if os.environ.get('METRIC_TODAY_DAILY_USAGE') is not None:
     g_usage = Gauge('aws_today_daily_usage', 'Today daily usage from AWS')
 if os.environ.get('METRIC_TODAY_DAILY_USAGE_NORM') is not None:
     g_usage_norm = Gauge('aws_today_daily_usage_norm', 'Today daily usage normalized from AWS')
+if os.environ.get('METRIC_FORECAST_COST') is not None:
+    g_forecast = Gauge('aws_cost_forecast', 'AWS cost forecast')
 
 scheduler = BackgroundScheduler()
 
@@ -29,6 +31,20 @@ def aws_query():
     now = datetime.now()
     yesterday = datetime.today() - timedelta(days=1)
     two_days_ago = datetime.today() - timedelta(days=2)
+
+    if os.environ.get('METRIC_FORECAST_COST') is not None:
+        r = client.get_cost_forecast(
+            TimePeriod={
+                'Start': yesterday.strftime("%Y-%m-%d"),
+                'End': now.strftime("%Y-%m-%d")
+            },
+            Granularity='MONTHLY',
+            Metric=["BlendedCost"]
+        )
+        cost = r["ResultsByTime"][0]["Total"]["BlendedCost"]["Amount"]
+        print("Updated AWS forecast cost: %s" % (cost))
+        g_forecast.set(float(cost))
+
     if os.environ.get('METRIC_TODAY_DAILY_COSTS') is not None:
 
         r = client.get_cost_and_usage(
