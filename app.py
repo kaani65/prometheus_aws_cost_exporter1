@@ -32,19 +32,6 @@ def aws_query():
     yesterday = datetime.today() - timedelta(days=1)
     two_days_ago = datetime.today() - timedelta(days=2)
 
-    if os.environ.get('METRIC_FORECAST_COST') is not None:
-        r = client.get_cost_forecast(
-            TimePeriod={
-                'Start': yesterday.strftime("%Y-%m-%d"),
-                'End': now.strftime("%Y-%m-%d")
-            },
-            Granularity='MONTHLY',
-            Metric=["BlendedCost"]
-        )
-        cost = r["ResultsByTime"][0]["Total"]["BlendedCost"]["Amount"]
-        print("Updated AWS forecast cost: %s" % (cost))
-        g_forecast.set(float(cost))
-
     if os.environ.get('METRIC_TODAY_DAILY_COSTS') is not None:
 
         r = client.get_cost_and_usage(
@@ -99,6 +86,19 @@ def aws_query():
         usage_norm = r["ResultsByTime"][0]["Total"]["NormalizedUsageAmount"]["Amount"]
         print("Updated AWS Daily Usage Norm: %s" %(usage_norm))
         g_usage_norm.set(float(usage_norm))
+
+    if os.environ.get('METRIC_FORECAST_COST') is not None:
+        r = client.get_cost_forecast(
+            TimePeriod={
+                'Start': yesterday.strftime("%Y-%m-%d"),
+                'End': now.strftime("%Y-%m-%d")
+            },
+            Granularity='MONTHLY',
+            Metric=["BlendedCost"]
+        )
+        cost = r["ResultsByTime"][0]["Total"]["BlendedCost"]["Amount"]
+        print("Updated AWS forecast cost: %s" % (cost))
+        g_forecast.set(float(cost))
 
     print("Finished calculating costs")
 
