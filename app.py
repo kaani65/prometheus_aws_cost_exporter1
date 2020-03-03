@@ -1,3 +1,4 @@
+#AWS Cost Exporter for EC2 instance for Prometheus
 from flask import Flask,Response
 from prometheus_client import Gauge,generate_latest
 import boto3
@@ -29,7 +30,6 @@ def aws_query():
     now = datetime.now()
     yesterday = datetime.today() - timedelta(days=1)
     two_days_ago = datetime.today() - timedelta(days=2)
-
     if os.environ.get('METRIC_TODAY_DAILY_COSTS') is not None:
 
         r = client.get_cost_and_usage(
