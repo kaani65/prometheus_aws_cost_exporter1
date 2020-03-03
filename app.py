@@ -1,4 +1,3 @@
-#AWS Cost Exporter for EC2 instance for Prometheus
 from flask import Flask,Response
 from prometheus_client import Gauge,generate_latest
 import boto3
