@@ -90,8 +90,8 @@ def aws_query():
     if os.environ.get('METRIC_FORECAST_COST') is not None:
         r = client.get_cost_forecast(
             TimePeriod={
-                'Start': yesterday.strftime('%Y-%m-%d'),
-                'End': now.strftime('%Y-%m-%d')
+                'Start': yesterday.strftime('%Y-%m'),
+                'End': now.strftime('%Y-%m')
             },
             Granularity='MONTHLY',
             Metric='BLENDED_COST'
