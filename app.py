@@ -91,7 +91,7 @@ def aws_query():
         r = client.get_cost_forecast(
             TimePeriod={
                 'Start': yesterday.strftime('%Y-%m-%d'),
-                'End': now.strftime('%Y-%m-%d')
+                'End': now.strftime('%Y-%m+1-%d')
             },
             Granularity='MONTHLY',
             Metric='BLENDED_COST'
