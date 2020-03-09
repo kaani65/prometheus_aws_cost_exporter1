@@ -33,7 +33,7 @@ def aws_query():
     now = datetime.now()
     yesterday = datetime.today() - timedelta(days=1)
     two_days_ago = datetime.today() - timedelta(days=2)
-    end_of_month =  datetime.month()+relativedelta(months=+1)
+    end_of_month = datetime.month() + relativedelta(months=1)
 
     if os.environ.get('METRIC_TODAY_DAILY_COSTS') is not None:
 
