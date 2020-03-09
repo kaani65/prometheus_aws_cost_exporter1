@@ -1,11 +1,13 @@
-from flask import Flask,Response
-from prometheus_client import Gauge,generate_latest
-import boto3
-from datetime import datetime, timedelta
-import time, os
 import atexit
+import os
+from datetime import datetime, timedelta
+
+
+import boto3
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
+from flask import Flask, Response
+from prometheus_client import Gauge, generate_latest
 
 QUERY_PERIOD = os.getenv('QUERY_PERIOD', "1800")
 
@@ -31,7 +33,7 @@ def aws_query():
     now = datetime.now()
     yesterday = datetime.today() - timedelta(days=1)
     two_days_ago = datetime.today() - timedelta(days=2)
-    next_month = datetime.month() - timedelta(months=1)
+    end_of_month = datetime.month() - timedelta(months=+1)
 
     if os.environ.get('METRIC_TODAY_DAILY_COSTS') is not None:
 
@@ -92,7 +94,7 @@ def aws_query():
         r = client.get_cost_forecast(
             TimePeriod={
                 'Start': yesterday.strftime('%Y-%m-%d'),
-                'End': next_month.strftime('%Y-%m-%d')
+                'End': end_of_month.strftime('%Y-%m-%d')
             },
             Granularity='MONTHLY',
             Metric='BLENDED_COST'
