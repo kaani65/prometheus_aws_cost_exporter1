@@ -100,7 +100,7 @@ def aws_query():
             Granularity='MONTHLY',
             Metric='BLENDED_COST'
         )
-        forecast = r["ResultsByTime"][0]["Total"]["BlendedCost"]["Amount"]
+        forecast = r["ForecastResultsByTime"][0]["Total"]["BLENDED_COST"]["Amount"]
         print("Updated AWS forecast cost: %s" % (forecast))
         g_forecast.set(float(forecast))
 
