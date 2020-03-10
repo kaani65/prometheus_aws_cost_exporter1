@@ -59,7 +59,7 @@ def aws_query():
             Granularity="DAILY",
             Metrics=["BlendedCost"]
         )
-        cost_yesterday = r["ResultsByTime"][0]["BlendedCost"]["Amount"]
+        cost_yesterday = r["ResultsByTime"][0]["Total"]["BlendedCost"]["Amount"]
         print("Yesterday's AWS Daily costs: %s" %(cost_yesterday))
         g_yesterday.set(float(cost_yesterday))
 
@@ -100,7 +100,7 @@ def aws_query():
             Granularity="MONTHLY",
             Metric=["BLENDED_COST"]
         )
-        forecast = r["ForecastResultsByTime"][0]["Total"]["BLENDED_COST"]["Amount"]
+        forecast = r["Total"]["BLENDED_COST"]["Amount"]["ForecastResultsByTime"][0]
         print("Updated AWS Forecast cost: %s" % (forecast))
         g_forecast.set(float(forecast))
 
