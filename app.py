@@ -59,7 +59,9 @@ def aws_query():
             Granularity="DAILY",
             Metrics=["BlendedCost"]
         )
-        
+        cost_yesterday = r["ResultsByTime"][0]["BlendedCost"]["Amount"]
+        print("Yesterday's AWS Daily costs: %s" %(cost_yesterday))
+        g_yesterday.set(float(cost_yesterday))
 
 
     if os.environ.get('METRIC_TODAY_DAILY_USAGE') is not None:
